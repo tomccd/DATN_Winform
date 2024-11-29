@@ -1,4 +1,4 @@
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using System;
 namespace DATN_Winform
 {
@@ -49,7 +49,7 @@ namespace DATN_Winform
                 this.Hide();
             }
             catch (SqlException ex) { 
-                /*Ki?m tra xem c� spam ?? tr?ng kh�ng ?*/
+                /*Kiểm tra xem có Spam INPUT không ?*/
                 if(String.IsNullOrWhiteSpace(txt_taikhoan.Text) || String.IsNullOrWhiteSpace(txt_matkhau.Text))
                 {
                     if (String.IsNullOrWhiteSpace(txt_taikhoan.Text))
@@ -70,6 +70,7 @@ namespace DATN_Winform
                     if(ex.Number == 18456)
                     {
                         DialogResult dialog = MessageBox.Show("Please check the login and password\n" + "or contact to the manager of database", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        this.ActiveControl = this.txt_taikhoan;
                     }
                     else if(ex.Number == -2)
                     {
@@ -84,7 +85,7 @@ namespace DATN_Winform
                 }
             }
         }
-        /*Nh?n Enter l� t? ??ng Signin*/
+        /*Nhấn Enter là Signin*/
         private void bt_signin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)

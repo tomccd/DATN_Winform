@@ -38,8 +38,11 @@
             button2 = new Button();
             button1 = new Button();
             label_nameuser = new Label();
+            panel3 = new Panel();
+            menu_Count1 = new Menu_Count();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
+            panel3.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -167,11 +170,29 @@
             label_nameuser.TabIndex = 0;
             label_nameuser.Text = "Xin chào, ";
             // 
+            // panel3
+            // 
+            panel3.Controls.Add(menu_Count1);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(404, 97);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(1167, 903);
+            panel3.TabIndex = 2;
+            // 
+            // menu_Count1
+            // 
+            menu_Count1.Location = new Point(0, 0);
+            menu_Count1.Name = "menu_Count1";
+            menu_Count1.Size = new Size(1167, 903);
+            menu_Count1.TabIndex = 0;
+            menu_Count1.Load += menu_Count1_Load;
+            // 
             // Menu
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1571, 1000);
+            Controls.Add(panel3);
             Controls.Add(panel2);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
@@ -182,6 +203,7 @@
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            panel3.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -197,5 +219,7 @@
         private Button button4;
         private Button button3;
         private Button button2;
+        private Panel panel3;
+        private Menu_Count menu_Count1;
     }
 }

@@ -1,15 +1,28 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.Collections;
 using System.Data;
+using System.Diagnostics;
+using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
+using System.Threading;
 namespace DATN_Winform
 {
     public partial class Menu : Form
     {
-        SqlConnection conn = null;
-        string id = null;
+        private SqlConnection conn = null;
+        private string id = null;
+        ArrayList total_IP_Address = new ArrayList();
         public Menu()
         {
             InitializeComponent();
+            /*Show only menu at startup*/
+            this.menu_Count1.Visible = true;
+            //this.add_Devices1.Visible = false;
+            //this.add_Product1.Visible = false;
+            //this.delete_Products1.Visible = false;
         }
+
+        /*Sync Connection between Tab*/
         public SqlConnection syncConnection
         {
             set
@@ -59,7 +72,10 @@ namespace DATN_Winform
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            DialogResult message = MessageBox.Show("This feature will be available in the future !", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.menu_Count1.Visible = true;
+            //this.add_Devices1.Visible = false;
+            //this.add_Product1.Visible = false;
+            //this.delete_Products1.Visible = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -93,6 +109,57 @@ namespace DATN_Winform
             if (message == DialogResult.Yes)
             {
                 Application.Exit();
+            }
+        }
+
+        private void menu_Count1_Load(object sender, EventArgs e)
+        {
+            this.menu_Count1.syncConnection = conn;
+            changeContentOnMenu_Count();
+        }
+        private void changeContentOnMenu_Count()
+        {
+            if (conn != null)
+            {
+                /*Thực hiện truy vấn*/
+                string numberOfTotalDevices = null;
+                string queryNumberTotalDevices = "SELECT COUNT(IP_Address) FROM Devices;";
+                string queryCollectIPAddress = "SELECT IP_Address FROM Devices;";
+                SqlCommand cmd = new SqlCommand(queryNumberTotalDevices, conn);
+                try
+                {
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataSet ds = new DataSet();
+                    adapter.Fill(ds);
+                    numberOfTotalDevices = ds.Tables[0].Rows[0][0].ToString();
+                    this.total_IP_Address.Clear();
+                    try
+                    {
+                        cmd = new SqlCommand(queryCollectIPAddress, conn);
+                        adapter = new SqlDataAdapter(cmd);
+                        ds = new DataSet();
+                        adapter.Fill(ds);
+                        /*Collect IP Address*/
+                        foreach(DataRow row in ds.Tables[0].Rows)
+                        {
+                            ArrayList element = new ArrayList();
+                            element.Add(row[0].ToString());
+                            element.Add(false);
+                            this.total_IP_Address.Add(element);
+                        }
+                        /*Update content in Menu_Count*/
+                        this.menu_Count1.changeLabelTotalDevice(numberOfTotalDevices);
+                        this.menu_Count1.setIP_Address_ArrayList = this.total_IP_Address;
+                    }
+                    catch(SqlException ex)
+                    {
+                        DialogResult message = MessageBox.Show($"Can't execute on Collect IP_Address in Devices with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    DialogResult message = MessageBox.Show($"Can't execute on Couting Total IP_Address in Devices with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
