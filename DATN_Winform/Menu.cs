@@ -17,6 +17,7 @@ namespace DATN_Winform
             InitializeComponent();
             /*Show only menu at startup*/
             this.menu_Count1.Visible = true;
+            this.add_Product2.Visible = false;
             //this.add_Devices1.Visible = false;
             //this.add_Product1.Visible = false;
             //this.delete_Products1.Visible = false;
@@ -73,14 +74,16 @@ namespace DATN_Winform
         private void button1_Click(object sender, EventArgs e)
         {
             this.menu_Count1.Visible = true;
+            this.add_Product2.Visible = false;
             //this.add_Devices1.Visible = false;
-            //this.add_Product1.Visible = false;
             //this.delete_Products1.Visible = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            DialogResult message = MessageBox.Show("This feature will be available in the future !", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.add_Product2.Visible = true;
+            this.add_Product2.fillInTypeProductCboBox();
+            this.menu_Count1.Visible = false;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -111,11 +114,17 @@ namespace DATN_Winform
                 Application.Exit();
             }
         }
-
         private void menu_Count1_Load(object sender, EventArgs e)
         {
+            /*Load -> Sync*/
             this.menu_Count1.syncConnection = conn;
             changeContentOnMenu_Count();
+        }
+        private void add_Product2_Load(object sender, EventArgs e)
+        {
+            /*Load -> Sync*/
+            this.add_Product2.syncConnection = conn;
+            
         }
         private void changeContentOnMenu_Count()
         {
@@ -140,7 +149,7 @@ namespace DATN_Winform
                         ds = new DataSet();
                         adapter.Fill(ds);
                         /*Collect IP Address*/
-                        foreach(DataRow row in ds.Tables[0].Rows)
+                        foreach (DataRow row in ds.Tables[0].Rows)
                         {
                             ArrayList element = new ArrayList();
                             element.Add(row[0].ToString());
@@ -151,7 +160,7 @@ namespace DATN_Winform
                         this.menu_Count1.changeLabelTotalDevice(numberOfTotalDevices);
                         this.menu_Count1.setIP_Address_ArrayList = this.total_IP_Address;
                     }
-                    catch(SqlException ex)
+                    catch (SqlException ex)
                     {
                         DialogResult message = MessageBox.Show($"Can't execute on Collect IP_Address in Devices with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
@@ -161,6 +170,11 @@ namespace DATN_Winform
                     DialogResult message = MessageBox.Show($"Can't execute on Couting Total IP_Address in Devices with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void add_Product1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

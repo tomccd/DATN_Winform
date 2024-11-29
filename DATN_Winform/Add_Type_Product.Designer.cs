@@ -29,19 +29,19 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            label1 = new Label();
-            label2 = new Label();
             panel2 = new Panel();
+            label2 = new Label();
+            label1 = new Label();
             panel3 = new Panel();
-            dataGridView1 = new DataGridView();
             label3 = new Label();
+            dataGridView1 = new DataGridView();
             panel4 = new Panel();
-            label4 = new Label();
-            label5 = new Label();
-            txt_id_type_product = new TextBox();
-            txt_name_type_product = new TextBox();
-            button1 = new Button();
             button2 = new Button();
+            button1 = new Button();
+            txt_name_type_product = new TextBox();
+            txt_id_type_product = new TextBox();
+            label5 = new Label();
+            label4 = new Label();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -61,16 +61,12 @@
             panel1.Size = new Size(1167, 116);
             panel1.TabIndex = 0;
             // 
-            // label1
+            // panel2
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.ForeColor = SystemColors.ControlLightLight;
-            label1.Location = new Point(39, 45);
-            label1.Name = "label1";
-            label1.Size = new Size(335, 29);
-            label1.TabIndex = 0;
-            label1.Text = "Cập nhật chủng loại sản phẩm";
+            panel2.Location = new Point(-1, 111);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(1167, 399);
+            panel2.TabIndex = 1;
             // 
             // label2
             // 
@@ -82,13 +78,18 @@
             label2.Size = new Size(25, 29);
             label2.TabIndex = 1;
             label2.Text = "x";
+            label2.Click += label2_Click;
             // 
-            // panel2
+            // label1
             // 
-            panel2.Location = new Point(-1, 111);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(1167, 399);
-            panel2.TabIndex = 1;
+            label1.AutoSize = true;
+            label1.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.ForeColor = SystemColors.ControlLightLight;
+            label1.Location = new Point(39, 45);
+            label1.Name = "label1";
+            label1.Size = new Size(335, 29);
+            label1.TabIndex = 0;
+            label1.Text = "Cập nhật chủng loại sản phẩm";
             // 
             // panel3
             // 
@@ -100,15 +101,6 @@
             panel3.Size = new Size(1131, 393);
             panel3.TabIndex = 1;
             // 
-            // dataGridView1
-            // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(23, 80);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 62;
-            dataGridView1.Size = new Size(1091, 281);
-            dataGridView1.TabIndex = 0;
-            // 
             // label3
             // 
             label3.AutoSize = true;
@@ -118,6 +110,15 @@
             label3.Size = new Size(351, 29);
             label3.TabIndex = 1;
             label3.Text = "Danh sách chủng loại sản phẩm";
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(23, 80);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowHeadersWidth = 62;
+            dataGridView1.Size = new Size(1091, 281);
+            dataGridView1.TabIndex = 0;
             // 
             // panel4
             // 
@@ -133,51 +134,6 @@
             panel4.Size = new Size(1131, 289);
             panel4.TabIndex = 2;
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label4.Location = new Point(97, 56);
-            label4.Name = "label4";
-            label4.Size = new Size(201, 29);
-            label4.TabIndex = 0;
-            label4.Text = "Mã loại sản phẩm";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label5.Location = new Point(97, 138);
-            label5.Name = "label5";
-            label5.Size = new Size(209, 29);
-            label5.TabIndex = 1;
-            label5.Text = "Tên loại sản phẩm";
-            // 
-            // txt_id_type_product
-            // 
-            txt_id_type_product.Location = new Point(476, 54);
-            txt_id_type_product.Name = "txt_id_type_product";
-            txt_id_type_product.Size = new Size(322, 31);
-            txt_id_type_product.TabIndex = 2;
-            // 
-            // txt_name_type_product
-            // 
-            txt_name_type_product.Location = new Point(476, 139);
-            txt_name_type_product.Name = "txt_name_type_product";
-            txt_name_type_product.Size = new Size(322, 31);
-            txt_name_type_product.TabIndex = 3;
-            // 
-            // button1
-            // 
-            button1.BackColor = SystemColors.Highlight;
-            button1.ForeColor = SystemColors.Control;
-            button1.Location = new Point(260, 219);
-            button1.Name = "button1";
-            button1.Size = new Size(127, 48);
-            button1.TabIndex = 4;
-            button1.Text = "Thêm";
-            button1.UseVisualStyleBackColor = false;
-            // 
             // button2
             // 
             button2.BackColor = SystemColors.Highlight;
@@ -189,6 +145,53 @@
             button2.TabIndex = 5;
             button2.Text = "Reset";
             button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
+            // 
+            // button1
+            // 
+            button1.BackColor = SystemColors.Highlight;
+            button1.ForeColor = SystemColors.Control;
+            button1.Location = new Point(260, 219);
+            button1.Name = "button1";
+            button1.Size = new Size(127, 48);
+            button1.TabIndex = 4;
+            button1.Text = "Thêm";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
+            // 
+            // txt_name_type_product
+            // 
+            txt_name_type_product.Location = new Point(476, 139);
+            txt_name_type_product.Name = "txt_name_type_product";
+            txt_name_type_product.Size = new Size(322, 31);
+            txt_name_type_product.TabIndex = 3;
+            // 
+            // txt_id_type_product
+            // 
+            txt_id_type_product.Location = new Point(476, 54);
+            txt_id_type_product.Name = "txt_id_type_product";
+            txt_id_type_product.Size = new Size(322, 31);
+            txt_id_type_product.TabIndex = 2;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label5.Location = new Point(97, 138);
+            label5.Name = "label5";
+            label5.Size = new Size(209, 29);
+            label5.TabIndex = 1;
+            label5.Text = "Tên loại sản phẩm";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label4.Location = new Point(97, 56);
+            label4.Name = "label4";
+            label4.Size = new Size(201, 29);
+            label4.TabIndex = 0;
+            label4.Text = "Mã loại sản phẩm";
             // 
             // Add_Type_Product
             // 
@@ -199,9 +202,11 @@
             Controls.Add(panel3);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
+            KeyPreview = true;
             Name = "Add_Type_Product";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Add_Type_Product";
+            KeyDown += btn1_KeyDown;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel3.ResumeLayout(false);

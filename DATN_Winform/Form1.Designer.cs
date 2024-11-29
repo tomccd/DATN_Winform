@@ -95,6 +95,7 @@
             txt_taikhoan.Name = "txt_taikhoan";
             txt_taikhoan.Size = new Size(242, 31);
             txt_taikhoan.TabIndex = 4;
+            txt_taikhoan.Click += txt_taikhoan_Clicked;
             // 
             // txt_matkhau
             // 
@@ -133,6 +134,7 @@
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
+            Click += txt_matkhau_Clicked;
             KeyDown += bt_signin_KeyDown;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

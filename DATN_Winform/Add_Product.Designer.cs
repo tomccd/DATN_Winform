@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            label1 = new Label();
             dataGrid_Products = new DataGridView();
+            label1 = new Label();
             panel2 = new Panel();
-            label2 = new Label();
-            label3 = new Label();
-            label4 = new Label();
-            txt_ma_san_pham = new TextBox();
-            txt_ten_san_pham = new TextBox();
-            cbo_ma_chung_loai_san_pham = new ComboBox();
-            btn_add_product = new Button();
             btn_reset_products = new Button();
+            btn_add_product = new Button();
+            cbo_ten_chung_loai_san_pham = new ComboBox();
+            txt_ten_san_pham = new TextBox();
+            txt_ma_san_pham = new TextBox();
+            label4 = new Label();
+            label3 = new Label();
+            label2 = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGrid_Products).BeginInit();
             panel2.SuspendLayout();
@@ -55,6 +55,15 @@
             panel1.Size = new Size(1077, 415);
             panel1.TabIndex = 0;
             // 
+            // dataGrid_Products
+            // 
+            dataGrid_Products.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGrid_Products.Location = new Point(56, 98);
+            dataGrid_Products.Name = "dataGrid_Products";
+            dataGrid_Products.RowHeadersWidth = 62;
+            dataGrid_Products.Size = new Size(940, 264);
+            dataGrid_Products.TabIndex = 1;
+            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -65,21 +74,12 @@
             label1.TabIndex = 0;
             label1.Text = "Bảng sản phẩm";
             // 
-            // dataGrid_Products
-            // 
-            dataGrid_Products.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGrid_Products.Location = new Point(56, 98);
-            dataGrid_Products.Name = "dataGrid_Products";
-            dataGrid_Products.RowHeadersWidth = 62;
-            dataGrid_Products.Size = new Size(940, 264);
-            dataGrid_Products.TabIndex = 1;
-            // 
             // panel2
             // 
             panel2.BackColor = SystemColors.ButtonHighlight;
             panel2.Controls.Add(btn_reset_products);
             panel2.Controls.Add(btn_add_product);
-            panel2.Controls.Add(cbo_ma_chung_loai_san_pham);
+            panel2.Controls.Add(cbo_ten_chung_loai_san_pham);
             panel2.Controls.Add(txt_ten_san_pham);
             panel2.Controls.Add(txt_ma_san_pham);
             panel2.Controls.Add(label4);
@@ -89,69 +89,6 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(1077, 358);
             panel2.TabIndex = 1;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(56, 50);
-            label2.Name = "label2";
-            label2.Size = new Size(157, 29);
-            label2.TabIndex = 0;
-            label2.Text = "Mã sản phẩm";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(56, 128);
-            label3.Name = "label3";
-            label3.Size = new Size(272, 29);
-            label3.TabIndex = 1;
-            label3.Text = "Mã chủng loại sản phẩm";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label4.Location = new Point(56, 219);
-            label4.Name = "label4";
-            label4.Size = new Size(165, 29);
-            label4.TabIndex = 2;
-            label4.Text = "Tên sản phẩm";
-            // 
-            // txt_ma_san_pham
-            // 
-            txt_ma_san_pham.Location = new Point(521, 51);
-            txt_ma_san_pham.Name = "txt_ma_san_pham";
-            txt_ma_san_pham.Size = new Size(364, 31);
-            txt_ma_san_pham.TabIndex = 3;
-            // 
-            // txt_ten_san_pham
-            // 
-            txt_ten_san_pham.Location = new Point(521, 220);
-            txt_ten_san_pham.Name = "txt_ten_san_pham";
-            txt_ten_san_pham.Size = new Size(364, 31);
-            txt_ten_san_pham.TabIndex = 4;
-            // 
-            // cbo_ma_chung_loai_san_pham
-            // 
-            cbo_ma_chung_loai_san_pham.FormattingEnabled = true;
-            cbo_ma_chung_loai_san_pham.Location = new Point(521, 129);
-            cbo_ma_chung_loai_san_pham.Name = "cbo_ma_chung_loai_san_pham";
-            cbo_ma_chung_loai_san_pham.Size = new Size(364, 33);
-            cbo_ma_chung_loai_san_pham.TabIndex = 5;
-            // 
-            // btn_add_product
-            // 
-            btn_add_product.BackColor = SystemColors.Highlight;
-            btn_add_product.ForeColor = SystemColors.Control;
-            btn_add_product.Location = new Point(175, 281);
-            btn_add_product.Name = "btn_add_product";
-            btn_add_product.Size = new Size(153, 59);
-            btn_add_product.TabIndex = 6;
-            btn_add_product.Text = "Thêm";
-            btn_add_product.UseVisualStyleBackColor = false;
             // 
             // btn_reset_products
             // 
@@ -163,6 +100,75 @@
             btn_reset_products.TabIndex = 7;
             btn_reset_products.Text = "Reset";
             btn_reset_products.UseVisualStyleBackColor = false;
+            btn_reset_products.Click += btn_reset_products_Click;
+            // 
+            // btn_add_product
+            // 
+            btn_add_product.BackColor = SystemColors.Highlight;
+            btn_add_product.ForeColor = SystemColors.Control;
+            btn_add_product.Location = new Point(175, 281);
+            btn_add_product.Name = "btn_add_product";
+            btn_add_product.Size = new Size(153, 59);
+            btn_add_product.TabIndex = 6;
+            btn_add_product.Text = "Thêm";
+            btn_add_product.UseVisualStyleBackColor = false;
+            btn_add_product.Click += btn_add_product_Click_1;
+            // 
+            // cbo_ten_chung_loai_san_pham
+            // 
+            cbo_ten_chung_loai_san_pham.FormattingEnabled = true;
+            cbo_ten_chung_loai_san_pham.Location = new Point(521, 129);
+            cbo_ten_chung_loai_san_pham.Name = "cbo_ten_chung_loai_san_pham";
+            cbo_ten_chung_loai_san_pham.Size = new Size(364, 33);
+            cbo_ten_chung_loai_san_pham.TabIndex = 5;
+            cbo_ten_chung_loai_san_pham.SelectedIndexChanged += cbo_ten_chung_loai_san_pham_SelectedIndexChanged;
+            cbo_ten_chung_loai_san_pham.Click += cbo_ten_chung_loai_san_pham_Clicked;
+            // 
+            // txt_ten_san_pham
+            // 
+            txt_ten_san_pham.Location = new Point(521, 220);
+            txt_ten_san_pham.Name = "txt_ten_san_pham";
+            txt_ten_san_pham.Size = new Size(364, 31);
+            txt_ten_san_pham.TabIndex = 4;
+            txt_ten_san_pham.Click += txt_ten_san_pham_Clicked;
+            // 
+            // txt_ma_san_pham
+            // 
+            txt_ma_san_pham.Location = new Point(521, 51);
+            txt_ma_san_pham.Name = "txt_ma_san_pham";
+            txt_ma_san_pham.Size = new Size(364, 31);
+            txt_ma_san_pham.TabIndex = 3;
+            txt_ma_san_pham.Click += txt_ma_san_pham_Clicked;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label4.Location = new Point(56, 219);
+            label4.Name = "label4";
+            label4.Size = new Size(165, 29);
+            label4.TabIndex = 2;
+            label4.Text = "Tên sản phẩm";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.Location = new Point(56, 128);
+            label3.Name = "label3";
+            label3.Size = new Size(280, 29);
+            label3.TabIndex = 1;
+            label3.Text = "Tên chủng loại sản phẩm";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.Location = new Point(56, 50);
+            label2.Name = "label2";
+            label2.Size = new Size(157, 29);
+            label2.TabIndex = 0;
+            label2.Text = "Mã sản phẩm";
             // 
             // Add_Product
             // 
@@ -191,7 +197,7 @@
         private Label label2;
         private Button btn_reset_products;
         private Button btn_add_product;
-        private ComboBox cbo_ma_chung_loai_san_pham;
+        private ComboBox cbo_ten_chung_loai_san_pham;
         private TextBox txt_ten_san_pham;
         private TextBox txt_ma_san_pham;
     }

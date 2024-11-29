@@ -20,7 +20,6 @@ namespace DATN_Winform
                 Application.Exit();
             }
         }
-
         private void bt_signin_Click(object sender, EventArgs e)
         {
             string connectionString =
@@ -35,7 +34,7 @@ namespace DATN_Winform
             try
             {
                 conn.Open();
-                DialogResult message = MessageBox.Show("Connection Successfully","Information",MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult message = MessageBox.Show("Connection Successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Menu mn = new Menu();
                 mn.syncConnection = conn;
                 mn.syncID = txt_taikhoan.Text;
@@ -48,9 +47,10 @@ namespace DATN_Winform
                 mn.Show(this);
                 this.Hide();
             }
-            catch (SqlException ex) { 
+            catch (SqlException ex)
+            {
                 /*Kiểm tra xem có Spam INPUT không ?*/
-                if(String.IsNullOrWhiteSpace(txt_taikhoan.Text) || String.IsNullOrWhiteSpace(txt_matkhau.Text))
+                if (String.IsNullOrWhiteSpace(txt_taikhoan.Text) || String.IsNullOrWhiteSpace(txt_matkhau.Text))
                 {
                     if (String.IsNullOrWhiteSpace(txt_taikhoan.Text))
                     {
@@ -66,13 +66,13 @@ namespace DATN_Winform
                 else
                 {
                     txt_taikhoan.BackColor = Color.White;
-                    txt_matkhau.BackColor= Color.White;
-                    if(ex.Number == 18456)
+                    txt_matkhau.BackColor = Color.White;
+                    if (ex.Number == 18456)
                     {
                         DialogResult dialog = MessageBox.Show("Please check the login and password\n" + "or contact to the manager of database", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         this.ActiveControl = this.txt_taikhoan;
                     }
-                    else if(ex.Number == -2)
+                    else if (ex.Number == -2)
                     {
                         DialogResult dialog = MessageBox.Show("Connection Timeout. May be check your connection to Server or contact to the manage of its", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
@@ -92,6 +92,16 @@ namespace DATN_Winform
             {
                 bt_signin.PerformClick();
             }
+        }
+
+        private void txt_taikhoan_Clicked(object sender, EventArgs e)
+        {
+            txt_taikhoan.BackColor = Color.White;
+        }
+
+        private void txt_matkhau_Clicked(object sender, EventArgs e)
+        {
+            txt_matkhau.BackColor = Color.White;
         }
     }
 }
