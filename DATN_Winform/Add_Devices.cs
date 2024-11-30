@@ -13,11 +13,12 @@ namespace DATN_Winform
         //Create a ManualResetEvent
         private ManualResetEvent mre = new ManualResetEvent(false);
         //Create a global DataTable
-        DataTable dt = null;
+        DataTable dt = new DataTable();
         public Add_Devices()
         {
             InitializeComponent();
             this.ActiveControl = txt_ip_devices;
+           
         }
         //Starting Ping
         private void StartingPingThread(ref ArrayList totalElement)
@@ -35,98 +36,80 @@ namespace DATN_Winform
         }
         private void ping(double tout, ArrayList element)
         {
+            
+            bool updateStatus = false;
             while (!mre.WaitOne(250))
             {
                 /*Nếu DataTable được tạo trước đó hoặc không phải DataTable trống*/
-                if (this.dt != null)
+                if (this.dt.Rows.Count > 0)
                 {
-                    if (this.dt.Rows.Count > 0)
+                    PingReply reply = null;
+                    Ping ping = new Ping();
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    long timeout = (long)tout * 1000;
+                    while (stopwatch.ElapsedMilliseconds < timeout)
                     {
-                        PingReply reply = null;
-                        Ping ping = new Ping();
-                        Stopwatch stopwatch = new Stopwatch();
-                        stopwatch.Start();
-                        long timeout = (long)tout * 1000;
-                        while (stopwatch.ElapsedMilliseconds < timeout)
+                        reply = ping.Send(element[0].ToString(), 1000);
+                        if (reply.Status == IPStatus.Success)
                         {
-                            reply = ping.Send(element[0].ToString(), 1000);
-                            if (reply.Status == IPStatus.Success)
-                            {
-                                break;
-                            }
-                            Thread.Sleep((int)timeout);
+                            break;
                         }
-                        if (reply.Status != IPStatus.Success)
-                        {
-                            /*If devices was connected before*/
-                            if ((bool)element[1] == true)
-                            {
-                                element[1] = false;
-                                //Travel the DataTable to find the IP Address
-                                foreach (DataRow row in this.dt.Rows)
-                                {
-                                    //Find in IP Columns
-                                    if (row[0] == element[0].ToString())
-                                    {
-                                        row[2] = "Chưa kết nối";
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            /*If device was not connected before*/
-                            if ((bool)element[1] == false)
-                            {
-                                element[1] = true;
-                                //Travel the DataTable to find the IP Address
-                                foreach (DataRow row in dt.Rows)
-                                {
-                                    //Find in IP Columns
-                                    if (row[0] == element[0].ToString())
-                                    {
-                                        row[2] = "Đã kết nối";
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        if ((bool)element[1] == true)
-                        {
-                            Console.WriteLine("Insert True");
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
-                                //Find in IP Columns
-                                if (result == 0 && dt.Rows.Count > 0) // avoid DataRace
-                                {
-                                    row[2] = "Đã kết nối";
-                                    Console.WriteLine("Insert True OK");
-                                    this.updateDataGrid();
-                                    break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Insert False");
-                            //Travel the DataTable to find the IP Address
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
-                                //Find in IP Columns
-                                if (result == 0 && dt.Rows.Count > 0) // avoid DataRace
-                                {
-                                    row[2] = "Chưa kết nối";
-                                    Console.WriteLine("Insert False OK");
-                                    this.updateDataGrid();
-                                    break;
-                                }
-                            }
-                        }     
                         Thread.Sleep((int)timeout);
                     }
+                    if (reply.Status != IPStatus.Success)
+                    {
+                        /*If devices was connected before*/
+                        if ((bool)element[1] == true)
+                        {
+                            element[1] = false;
+                        }
+                    }
+                    else
+                    {
+                        /*If device was not connected before*/
+                        if ((bool)element[1] == false)
+                        {
+                            element[1] = true;
+                        }
+                    }
+                    if ((bool)element[1] == true)
+                    {
+                        Console.WriteLine("Insert True");
+                        foreach (DataRow row in this.dt.Rows)
+                        {
+                            int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
+                            Console.WriteLine($"Number Columns: {row.ItemArray.Length}");
+                            //Find in IP Columns
+                            if (result == 0) // avoid DataRace
+                            {
+                                row[2] = "Đã kết nối";
+                                Console.WriteLine("Insert True OK");
+                                this.updateDataGrid();
+                                break;
+                            }
+                        }
+                    }
+                    else if ((bool)element[1] == false)
+                    {
+                        Console.WriteLine("Insert False");
+                        //Travel the DataTable to find the IP Address
+                        foreach (DataRow row in this.dt.Rows)
+                        {
+                            int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
+                            Console.WriteLine($"Number Columns: {row.ItemArray.Length}");
+                            //Find in IP Columns
+                            if (result == 0) // avoid DataRace
+                            {
+                                row[2] = "Chưa kết nối";
+                                Console.WriteLine("Insert False OK");
+                                this.updateDataGrid();
+                                break;
+                            }
+                        }
+                    }
+                    //GC.Collect(); // Garbage Collection
+                    Thread.Sleep(500);
                 }
             }
         }
@@ -138,7 +121,12 @@ namespace DATN_Winform
                 {
                     if (this.dt != null)
                     {
+                        var oldTable = dataGrid_Device_Productivity.DataSource as IDisposable;
                         dataGrid_Device_Productivity.DataSource = this.dt;
+                        if (oldTable != null)
+                        {
+                            oldTable.Dispose();
+                        }
                         dataGrid_Device_Productivity.Refresh();
                     }
                 }));
@@ -231,6 +219,7 @@ namespace DATN_Winform
                                     adapter.Fill(ds);
                                     if (ds.Tables[0].Rows.Count > 0)
                                     {
+                                        var oldTable = dataGrid_Device_Productivity.DataSource as IDisposable;
                                         dt = new DataTable();
                                         dt = ds.Tables[0];
                                         //Bổ sung cột trạng thái
@@ -256,6 +245,11 @@ namespace DATN_Winform
                                         dataGrid_Device_Productivity.EnableHeadersVisualStyles = false;
                                         dataGrid_Device_Productivity.ColumnHeadersDefaultCellStyle.BackColor = Color.AliceBlue;
                                         dataGrid_Device_Productivity.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                                        if(oldTable != null)
+                                        {
+                                            oldTable.Dispose();
+                                        }
+
                                     }
                                     txt_ip_devices.Text = "";
                                     txt_name_devices.Text = "";

@@ -17,6 +17,7 @@ namespace DATN_Winform
         public Menu_Count()
         {
             InitializeComponent();
+            
         }
         //Starting Ping
         private void StartingPingThread(ref ArrayList totalElement)
@@ -27,19 +28,24 @@ namespace DATN_Winform
                 foreach (ArrayList element in totalElement)
                 {
                     /*Each IP will create a Thread to check if that IP Address is existed */
-                    Thread pingThread = new Thread(() => ping(1, element));
-                    pingThread.IsBackground = true;
-                    pingThread.Start();
+                    if (element != null)
+                    {
+                        Thread pingThread = new Thread(() => ping(1, element));
+                        pingThread.IsBackground = true;
+                        pingThread.Start();
+                    }
                 }
             }
         }
         //Ping to Registered Device
-        private void ping(double tout, ArrayList element)
+        private void ping(double tout,ArrayList element)
         {
+            
+            //Console.WriteLine("Thread is running");
             //Wait for mre flags
-            while (!mre.WaitOne(250))
+            while (!mre.WaitOne(1000))
             {
-                Console.WriteLine("Thread OK");
+                //Console.WriteLine("Thread OK");
                 PingReply reply = null;
                 Ping ping = new Ping();
                 Stopwatch stopwatch = new Stopwatch();
@@ -52,7 +58,7 @@ namespace DATN_Winform
                     {
                         break;
                     }
-                    Thread.Sleep((int)timeout);
+                    //Thread.Sleep((int)(long)tout * 1000);
                 }
                 if (reply.Status != IPStatus.Success)
                 {
@@ -74,7 +80,11 @@ namespace DATN_Winform
                         this.updateLabel_Online_Devices(active_device.ToString());
                     }
                 }
-                Thread.Sleep((int)timeout);
+                GC.Collect(); // Garbage Collection
+                GC.WaitForPendingFinalizers();
+                GC.WaitForFullGCComplete();
+                Thread.Sleep(500);
+                
             }
             Console.WriteLine("Kill");
         }
@@ -122,6 +132,7 @@ namespace DATN_Winform
                         adapter.Fill(ds);
                         if (ds.Tables[0].Rows.Count > 0)
                         {
+                            var oldTable = dataGrid_weighed_Product.DataSource as IDisposable;
                             dataGrid_weighed_Product.DataSource = ds.Tables[0];
                             /*Sửa tên cột*/
                             dataGrid_weighed_Product.Columns[0].HeaderText = "ID sản phẩm";
@@ -132,6 +143,11 @@ namespace DATN_Winform
                             dataGrid_weighed_Product.EnableHeadersVisualStyles = false;
                             dataGrid_weighed_Product.ColumnHeadersDefaultCellStyle.BackColor = Color.AliceBlue;
                             dataGrid_weighed_Product.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                            if(oldTable != null)
+                            {
+                                oldTable.Dispose();
+                            }
+                            ds.Clear();
                         }
                     }
                     catch (SqlException ex)

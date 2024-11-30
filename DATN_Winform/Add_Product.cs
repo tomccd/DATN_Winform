@@ -135,6 +135,7 @@ namespace DATN_Winform
                                     adapter.Fill(ds);
                                     if (ds.Tables[0].Rows.Count > 0)
                                     {
+                                        var oldTable = dataGrid_Products.DataSource as IDisposable;
                                         this.dataGrid_Products.DataSource = ds.Tables[0];
                                         /*Sửa tên cột*/
                                         this.dataGrid_Products.Columns[0].HeaderText = "ID kiểu sản phẩm";
@@ -144,6 +145,11 @@ namespace DATN_Winform
                                         this.dataGrid_Products.EnableHeadersVisualStyles = false;
                                         this.dataGrid_Products.ColumnHeadersDefaultCellStyle.BackColor = Color.AliceBlue;
                                         this.dataGrid_Products.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                                        //Release OldTable
+                                        if(oldTable != null)
+                                        {
+                                            oldTable.Dispose();
+                                        }
                                     }
                                     txt_ma_san_pham.Text = "";
                                     cbo_ten_chung_loai_san_pham.SelectedIndex = -1;
