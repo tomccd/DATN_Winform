@@ -33,9 +33,9 @@
             label1 = new Label();
             panel2 = new Panel();
             btn_reset_products = new Button();
-            btn_delete_product = new Button();
-            txt_ten_san_pham = new TextBox();
-            txt_ma_san_pham = new TextBox();
+            btn_add_devices = new Button();
+            txt_name_devices = new TextBox();
+            txt_ip_devices = new TextBox();
             label4 = new Label();
             label2 = new Label();
             panel1.SuspendLayout();
@@ -76,9 +76,9 @@
             // 
             panel2.BackColor = SystemColors.ButtonHighlight;
             panel2.Controls.Add(btn_reset_products);
-            panel2.Controls.Add(btn_delete_product);
-            panel2.Controls.Add(txt_ten_san_pham);
-            panel2.Controls.Add(txt_ma_san_pham);
+            panel2.Controls.Add(btn_add_devices);
+            panel2.Controls.Add(txt_name_devices);
+            panel2.Controls.Add(txt_ip_devices);
             panel2.Controls.Add(label4);
             panel2.Controls.Add(label2);
             panel2.Location = new Point(34, 512);
@@ -96,31 +96,35 @@
             btn_reset_products.TabIndex = 7;
             btn_reset_products.Text = "Reset";
             btn_reset_products.UseVisualStyleBackColor = false;
+            btn_reset_products.Click += btn_reset_products_Click;
             // 
-            // btn_delete_product
+            // btn_add_devices
             // 
-            btn_delete_product.BackColor = SystemColors.Highlight;
-            btn_delete_product.ForeColor = SystemColors.Control;
-            btn_delete_product.Location = new Point(175, 281);
-            btn_delete_product.Name = "btn_delete_product";
-            btn_delete_product.Size = new Size(153, 59);
-            btn_delete_product.TabIndex = 6;
-            btn_delete_product.Text = "Thêm";
-            btn_delete_product.UseVisualStyleBackColor = false;
+            btn_add_devices.BackColor = SystemColors.Highlight;
+            btn_add_devices.ForeColor = SystemColors.Control;
+            btn_add_devices.Location = new Point(175, 281);
+            btn_add_devices.Name = "btn_add_devices";
+            btn_add_devices.Size = new Size(153, 59);
+            btn_add_devices.TabIndex = 6;
+            btn_add_devices.Text = "Thêm";
+            btn_add_devices.UseVisualStyleBackColor = false;
+            btn_add_devices.Click += btn_add_device_Click;
             // 
-            // txt_ten_san_pham
+            // txt_name_devices
             // 
-            txt_ten_san_pham.Location = new Point(521, 180);
-            txt_ten_san_pham.Name = "txt_ten_san_pham";
-            txt_ten_san_pham.Size = new Size(364, 31);
-            txt_ten_san_pham.TabIndex = 4;
+            txt_name_devices.Location = new Point(521, 180);
+            txt_name_devices.Name = "txt_name_devices";
+            txt_name_devices.Size = new Size(364, 31);
+            txt_name_devices.TabIndex = 4;
+            txt_name_devices.Click += txt_name_devices_Clicked;
             // 
-            // txt_ma_san_pham
+            // txt_ip_devices
             // 
-            txt_ma_san_pham.Location = new Point(521, 76);
-            txt_ma_san_pham.Name = "txt_ma_san_pham";
-            txt_ma_san_pham.Size = new Size(364, 31);
-            txt_ma_san_pham.TabIndex = 3;
+            txt_ip_devices.Location = new Point(521, 76);
+            txt_ip_devices.Name = "txt_ip_devices";
+            txt_ip_devices.Size = new Size(364, 31);
+            txt_ip_devices.TabIndex = 3;
+            txt_ip_devices.Click += txt_ip_devices_Clicked;
             // 
             // label4
             // 
@@ -165,9 +169,9 @@
         private Label label1;
         private Panel panel2;
         private Button btn_reset_products;
-        private Button btn_delete_product;
-        private TextBox txt_ten_san_pham;
-        private TextBox txt_ma_san_pham;
+        private Button btn_add_devices;
+        private TextBox txt_name_devices;
+        private TextBox txt_ip_devices;
         private Label label4;
         private Label label2;
     }

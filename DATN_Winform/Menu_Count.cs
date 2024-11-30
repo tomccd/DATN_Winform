@@ -23,6 +23,7 @@ namespace DATN_Winform
         {
             if (totalElement.Count > 0)
             {
+                Console.WriteLine("Starting create Thread");
                 foreach (ArrayList element in totalElement)
                 {
                     /*Each IP will create a Thread to check if that IP Address is existed */
@@ -36,8 +37,9 @@ namespace DATN_Winform
         private void ping(double tout, ArrayList element)
         {
             //Wait for mre flags
-            while (!mre.WaitOne(1000))
+            while (!mre.WaitOne(250))
             {
+                Console.WriteLine("Thread OK");
                 PingReply reply = null;
                 Ping ping = new Ping();
                 Stopwatch stopwatch = new Stopwatch();
@@ -72,7 +74,9 @@ namespace DATN_Winform
                         this.updateLabel_Online_Devices(active_device.ToString());
                     }
                 }
+                Thread.Sleep((int)timeout);
             }
+            Console.WriteLine("Kill");
         }
         //Update Label
         private void updateLabel_Online_Devices(string content)
@@ -181,8 +185,8 @@ namespace DATN_Winform
         {
             set
             {
-                this.total_IP_Address.Clear();
                 this.active_device = 0;
+                this.total_IP_Address.Clear();
                 mre.Set();
                 Thread.Sleep(250);
                 this.total_IP_Address = value;

@@ -39,6 +39,7 @@
             button1 = new Button();
             label_nameuser = new Label();
             panel3 = new Panel();
+            add_Devices1 = new Add_Devices();
             delete_Products1 = new Delete_Products();
             add_Product2 = new Add_Product();
             menu_Count1 = new Menu_Count();
@@ -174,6 +175,7 @@
             // 
             // panel3
             // 
+            panel3.Controls.Add(add_Devices1);
             panel3.Controls.Add(delete_Products1);
             panel3.Controls.Add(add_Product2);
             panel3.Controls.Add(menu_Count1);
@@ -182,6 +184,14 @@
             panel3.Name = "panel3";
             panel3.Size = new Size(1167, 903);
             panel3.TabIndex = 2;
+            // 
+            // add_Devices1
+            // 
+            add_Devices1.Location = new Point(0, 0);
+            add_Devices1.Name = "add_Devices1";
+            add_Devices1.Size = new Size(1167, 903);
+            add_Devices1.TabIndex = 3;
+            add_Devices1.Load += add_Devices1_Load;
             // 
             // delete_Products1
             // 
@@ -243,5 +253,6 @@
         private Menu_Count menu_Count1;
         private Add_Product add_Product2;
         private Delete_Products delete_Products1;
+        private Add_Devices add_Devices1;
     }
 }

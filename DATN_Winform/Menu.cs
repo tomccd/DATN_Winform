@@ -1,15 +1,12 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Collections;
 using System.Data;
-using System.Diagnostics;
-using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using System.Threading;
 namespace DATN_Winform
 {
     public partial class Menu : Form
     {
         private SqlConnection conn = null;
+        bool isPush = false;
         private string id = null;
         ArrayList total_IP_Address = new ArrayList();
         public Menu()
@@ -19,6 +16,7 @@ namespace DATN_Winform
             this.menu_Count1.Visible = true;
             this.add_Product2.Visible = false;
             this.delete_Products1.Visible = false;
+            this.add_Devices1.Visible = false;
         }
 
         /*Sync Connection between Tab*/
@@ -71,18 +69,24 @@ namespace DATN_Winform
         }
         private void button1_Click(object sender, EventArgs e)
         {
+            if(this.menu_Count1.Visible == false)
+            {
+                this.changeContentOnMenu_Count();
+            }
             this.menu_Count1.Visible = true;
             this.add_Product2.Visible = false;
             this.delete_Products1.Visible = false;
-            //this.add_Devices1.Visible = false;
+            this.add_Devices1.Visible = false;
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             this.add_Product2.Visible = true;
-            this.add_Product2.fillInTypeProductCboBox();
             this.menu_Count1.Visible = false;
             this.delete_Products1.Visible = false;
+            this.add_Devices1.Visible = false;
+            this.add_Product2.fillInTypeProductCboBox();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -90,11 +94,23 @@ namespace DATN_Winform
             this.menu_Count1.Visible = false;
             this.add_Product2.Visible = false;
             this.delete_Products1.Visible = true;
+            this.add_Devices1.Visible = false;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            DialogResult message = MessageBox.Show("This feature will be available in the future !", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (this.add_Devices1.Visible == false)
+            {
+                DialogResult message = MessageBox.Show("Việc thiết bị có thể làm sai lệch hệ thống giám sát. Bạn có thêm thiết bị mới không?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (message == DialogResult.Yes)
+                {
+                    this.updateArrayListOnAdd_Devices();
+                    this.menu_Count1.Visible = false;
+                    this.add_Product2.Visible = false;
+                    this.delete_Products1.Visible = false;
+                    this.add_Devices1.Visible = true;
+                }
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -132,7 +148,40 @@ namespace DATN_Winform
             /*Load -> Sync*/
             this.delete_Products1.syncConnection = conn;
         }
-
+        private void add_Devices1_Load(object sender, EventArgs e)
+        {
+            /*Load -> Sync*/
+            this.add_Devices1.syncConnection = conn;
+            //updateArrayListOnAdd_Devices();
+        }
+        private void updateArrayListOnAdd_Devices()
+        {
+            if (conn != null)
+            {
+                /*Thực hiện truy vấn*/
+                string queryCollectIPAddress = "SELECT IP_Address FROM Devices;";
+                SqlCommand cmd = new SqlCommand(queryCollectIPAddress, conn);
+                try
+                {
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataSet ds = new DataSet();
+                    adapter.Fill(ds);
+                    /*Collect IP Address*/
+                    foreach (DataRow row in ds.Tables[0].Rows)
+                    {
+                        ArrayList element = new ArrayList();
+                        element.Add(row[0].ToString());
+                        element.Add(false);
+                        this.total_IP_Address.Add(element);
+                    }
+                    this.add_Devices1.set_IP_Address_ArrayList = this.total_IP_Address;
+                }
+                catch (SqlException ex)
+                {
+                    DialogResult message = MessageBox.Show($"Can't execute on Collect IP_Address in Devices Tables with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
         private void changeContentOnMenu_Count()
         {
             if (conn != null)
@@ -156,6 +205,8 @@ namespace DATN_Winform
                         ds = new DataSet();
                         adapter.Fill(ds);
                         /*Collect IP Address*/
+                        total_IP_Address.Clear();
+                        total_IP_Address = new ArrayList();
                         foreach (DataRow row in ds.Tables[0].Rows)
                         {
                             ArrayList element = new ArrayList();
@@ -169,12 +220,12 @@ namespace DATN_Winform
                     }
                     catch (SqlException ex)
                     {
-                        DialogResult message = MessageBox.Show($"Can't execute on Collect IP_Address in Devices with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        DialogResult message = MessageBox.Show($"Can't execute on Collect IP_Address in Devices Tables with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (SqlException ex)
                 {
-                    DialogResult message = MessageBox.Show($"Can't execute on Couting Total IP_Address in Devices with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    DialogResult message = MessageBox.Show($"Can't execute on Couting Total IP_Address in Devices Tables with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

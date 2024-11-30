@@ -1,10 +1,17 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.Collections;
 using System.Data;
 namespace DATN_Winform
 {
     public partial class Add_Product : UserControl
     {
         SqlConnection conn = null;
+        /*Create ArrayList that contain IP_Address*/
+        ArrayList total_IP_Address = new ArrayList();
+        //Create a ManualResetEvent
+        private ManualResetEvent mre = new ManualResetEvent(false);
+        //Number of active device
+        private int active_device = 0;
         public Add_Product()
         {
             InitializeComponent();
