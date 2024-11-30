@@ -32,14 +32,12 @@
             dataGrid_Products = new DataGridView();
             label1 = new Label();
             panel2 = new Panel();
+            cbo_choice = new ComboBox();
+            label3 = new Label();
             btn_reset_products = new Button();
             btn_delete_product = new Button();
-            txt_ten_san_pham = new TextBox();
-            txt_ma_san_pham = new TextBox();
-            label4 = new Label();
-            label3 = new Label();
+            txt_input = new TextBox();
             label2 = new Label();
-            textBox1 = new TextBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGrid_Products).BeginInit();
             panel2.SuspendLayout();
@@ -77,18 +75,37 @@
             // panel2
             // 
             panel2.BackColor = SystemColors.ButtonHighlight;
-            panel2.Controls.Add(textBox1);
+            panel2.Controls.Add(cbo_choice);
+            panel2.Controls.Add(label3);
             panel2.Controls.Add(btn_reset_products);
             panel2.Controls.Add(btn_delete_product);
-            panel2.Controls.Add(txt_ten_san_pham);
-            panel2.Controls.Add(txt_ma_san_pham);
-            panel2.Controls.Add(label4);
-            panel2.Controls.Add(label3);
+            panel2.Controls.Add(txt_input);
             panel2.Controls.Add(label2);
             panel2.Location = new Point(32, 507);
             panel2.Name = "panel2";
             panel2.Size = new Size(1077, 358);
             panel2.TabIndex = 2;
+            // 
+            // cbo_choice
+            // 
+            cbo_choice.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbo_choice.FormattingEnabled = true;
+            cbo_choice.Items.AddRange(new object[] { "Mã sản phẩm", "Tên sản phẩm" });
+            cbo_choice.Location = new Point(520, 75);
+            cbo_choice.Name = "cbo_choice";
+            cbo_choice.Size = new Size(364, 33);
+            cbo_choice.TabIndex = 9;
+            cbo_choice.Click += cbo_choice_Clicked;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.Location = new Point(77, 75);
+            label3.Name = "label3";
+            label3.Size = new Size(224, 29);
+            label3.TabIndex = 8;
+            label3.Text = "Lựa chọn muốn xóa";
             // 
             // btn_reset_products
             // 
@@ -100,6 +117,7 @@
             btn_reset_products.TabIndex = 7;
             btn_reset_products.Text = "Reset";
             btn_reset_products.UseVisualStyleBackColor = false;
+            btn_reset_products.Click += btn_reset_products_Click;
             // 
             // btn_delete_product
             // 
@@ -111,59 +129,25 @@
             btn_delete_product.TabIndex = 6;
             btn_delete_product.Text = "Xóa";
             btn_delete_product.UseVisualStyleBackColor = false;
+            btn_delete_product.Click += btn_delete_product_Click;
             // 
-            // txt_ten_san_pham
+            // txt_input
             // 
-            txt_ten_san_pham.Location = new Point(521, 220);
-            txt_ten_san_pham.Name = "txt_ten_san_pham";
-            txt_ten_san_pham.ReadOnly = true;
-            txt_ten_san_pham.Size = new Size(364, 31);
-            txt_ten_san_pham.TabIndex = 4;
-            // 
-            // txt_ma_san_pham
-            // 
-            txt_ma_san_pham.Location = new Point(521, 51);
-            txt_ma_san_pham.Name = "txt_ma_san_pham";
-            txt_ma_san_pham.Size = new Size(364, 31);
-            txt_ma_san_pham.TabIndex = 3;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label4.Location = new Point(56, 219);
-            label4.Name = "label4";
-            label4.Size = new Size(165, 29);
-            label4.TabIndex = 2;
-            label4.Text = "Tên sản phẩm";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(56, 128);
-            label3.Name = "label3";
-            label3.Size = new Size(272, 29);
-            label3.TabIndex = 1;
-            label3.Text = "Mã chủng loại sản phẩm";
+            txt_input.Location = new Point(520, 163);
+            txt_input.Name = "txt_input";
+            txt_input.Size = new Size(364, 31);
+            txt_input.TabIndex = 3;
+            txt_input.Click += txt_input_Clicked;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(56, 50);
+            label2.Location = new Point(77, 162);
             label2.Name = "label2";
-            label2.Size = new Size(157, 29);
+            label2.Size = new Size(69, 29);
             label2.TabIndex = 0;
-            label2.Text = "Mã sản phẩm";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(521, 128);
-            textBox1.Name = "textBox1";
-            textBox1.ReadOnly = true;
-            textBox1.Size = new Size(364, 31);
-            textBox1.TabIndex = 8;
+            label2.Text = "Input";
             // 
             // Delete_Products
             // 
@@ -191,9 +175,10 @@
         private Button btn_reset_products;
         private Button btn_delete_product;
         private TextBox txt_ten_san_pham;
-        private TextBox txt_ma_san_pham;
+        private TextBox txt_input;
         private Label label4;
-        private Label label3;
         private Label label2;
+        private ComboBox cbo_choice;
+        private Label label3;
     }
 }

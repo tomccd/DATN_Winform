@@ -116,6 +116,7 @@
             // 
             // cbo_ten_chung_loai_san_pham
             // 
+            cbo_ten_chung_loai_san_pham.DropDownStyle = ComboBoxStyle.DropDownList;
             cbo_ten_chung_loai_san_pham.FormattingEnabled = true;
             cbo_ten_chung_loai_san_pham.Location = new Point(521, 129);
             cbo_ten_chung_loai_san_pham.Name = "cbo_ten_chung_loai_san_pham";

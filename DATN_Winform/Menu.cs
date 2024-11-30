@@ -18,9 +18,7 @@ namespace DATN_Winform
             /*Show only menu at startup*/
             this.menu_Count1.Visible = true;
             this.add_Product2.Visible = false;
-            //this.add_Devices1.Visible = false;
-            //this.add_Product1.Visible = false;
-            //this.delete_Products1.Visible = false;
+            this.delete_Products1.Visible = false;
         }
 
         /*Sync Connection between Tab*/
@@ -75,8 +73,8 @@ namespace DATN_Winform
         {
             this.menu_Count1.Visible = true;
             this.add_Product2.Visible = false;
+            this.delete_Products1.Visible = false;
             //this.add_Devices1.Visible = false;
-            //this.delete_Products1.Visible = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -84,11 +82,14 @@ namespace DATN_Winform
             this.add_Product2.Visible = true;
             this.add_Product2.fillInTypeProductCboBox();
             this.menu_Count1.Visible = false;
+            this.delete_Products1.Visible = false;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            DialogResult message = MessageBox.Show("This feature will be available in the future !", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.menu_Count1.Visible = false;
+            this.add_Product2.Visible = false;
+            this.delete_Products1.Visible = true;
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -124,8 +125,14 @@ namespace DATN_Winform
         {
             /*Load -> Sync*/
             this.add_Product2.syncConnection = conn;
-            
+
         }
+        private void delete_Products1_Load(object sender, EventArgs e)
+        {
+            /*Load -> Sync*/
+            this.delete_Products1.syncConnection = conn;
+        }
+
         private void changeContentOnMenu_Count()
         {
             if (conn != null)
@@ -172,9 +179,5 @@ namespace DATN_Winform
             }
         }
 
-        private void add_Product1_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

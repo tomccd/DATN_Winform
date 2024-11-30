@@ -8,6 +8,7 @@ namespace DATN_Winform
         public Add_Product()
         {
             InitializeComponent();
+            this.ActiveControl = this.txt_ma_san_pham;
         }
         //Sync Connection
         public SqlConnection syncConnection
@@ -74,9 +75,9 @@ namespace DATN_Winform
                     add_type_product.syncConnection = conn;
                     add_type_product.Show(this);
                 }
-                else
+                else if (message == DialogResult.No)
                 {
-                    cbo_ten_chung_loai_san_pham.Text = "";
+                    cbo_ten_chung_loai_san_pham.SelectedIndex = -1;
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace DATN_Winform
                 }
                 if (String.IsNullOrEmpty(this.txt_ma_san_pham.Text))
                 {
-                    this.txt_ten_san_pham.BackColor = Color.Red;
+                    this.txt_ma_san_pham.BackColor = Color.Red;
                 }
             }
             else
@@ -116,9 +117,38 @@ namespace DATN_Winform
                         {
                             cmd.ExecuteNonQuery();
                             DialogResult message = MessageBox.Show("Insert to Type Product Table Successfully!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            txt_ma_san_pham.Text = "";
-                            cbo_ten_chung_loai_san_pham.Text = "";
-                            txt_ten_san_pham.Text = "";
+                            if (message == DialogResult.OK)
+                            {
+                                query = "SELECT Products.ID_Product, Products.Name_Product, Type_Product.Name_Type_Product FROM Products INNER JOIN Type_Product ON Products.ID_Type_Product = Type_Product.ID_Type_Product;";
+                                cmd = new SqlCommand(query, conn);
+                                try
+                                {
+                                    adapter = new SqlDataAdapter(cmd);
+                                    ds = new DataSet();
+                                    adapter.Fill(ds);
+                                    if (ds.Tables[0].Rows.Count > 0)
+                                    {
+                                        this.dataGrid_Products.DataSource = ds.Tables[0];
+                                        /*Sửa tên cột*/
+                                        this.dataGrid_Products.Columns[0].HeaderText = "ID kiểu sản phẩm";
+                                        this.dataGrid_Products.Columns[1].HeaderText = "Tên sản phẩm";
+                                        this.dataGrid_Products.Columns[2].HeaderText = "Tên kiểu sản phẩm";
+                                        /*Sửa màu cột*/
+                                        this.dataGrid_Products.EnableHeadersVisualStyles = false;
+                                        this.dataGrid_Products.ColumnHeadersDefaultCellStyle.BackColor = Color.AliceBlue;
+                                        this.dataGrid_Products.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                                    }
+                                    txt_ma_san_pham.Text = "";
+                                    cbo_ten_chung_loai_san_pham.SelectedIndex = -1;
+                                    txt_ten_san_pham.Text = "";
+                                    this.ActiveControl = this.txt_ma_san_pham;
+                                }
+                                catch (SqlException ex)
+                                {
+                                    message = MessageBox.Show($"Can't Execute Query to Products Table with error: {ex} ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                            }
+
                         }
                         catch (SqlException ex)
                         {
@@ -140,10 +170,11 @@ namespace DATN_Winform
             txt_ten_san_pham.BackColor = Color.White;
             //Reset
             txt_ma_san_pham.Text = "";
-            cbo_ten_chung_loai_san_pham.Text = "";
+            cbo_ten_chung_loai_san_pham.SelectedIndex = -1;
             this.fillInTypeProductCboBox();
             txt_ten_san_pham.Text = "";
             this.ActiveControl = this.txt_ma_san_pham;
+            dataGrid_Products.DataSource = null;
         }
     }
 }

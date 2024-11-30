@@ -80,9 +80,33 @@ namespace DATN_Winform
                             }
                             else
                             {
-                                txt_id_type_product.Text = "";
-                                txt_name_type_product.Text = "";
-                                this.ActiveControl = this.txt_id_type_product;
+                                query = "SELECT * FROM Type_Product";
+                                cmd = new SqlCommand(query, conn);
+                                try
+                                {
+                                    adapter = new SqlDataAdapter(cmd);
+                                    ds = new DataSet();
+                                    adapter.Fill(ds);
+                                    if (ds.Tables[0].Rows.Count > 0)
+                                    {
+                                        dataGrid_Type_Product.DataSource = ds.Tables[0];
+                                        /*Sửa tên cột*/
+                                        dataGrid_Type_Product.Columns[0].HeaderText = "ID kiểu sản phẩm";
+                                        dataGrid_Type_Product.Columns[1].HeaderText = "Tên kiểu sản phẩm";
+                                        /*Sửa màu cột*/
+                                        dataGrid_Type_Product.EnableHeadersVisualStyles = false;
+                                        dataGrid_Type_Product.ColumnHeadersDefaultCellStyle.BackColor = Color.AliceBlue;
+                                        dataGrid_Type_Product.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                                    }
+                                    txt_id_type_product.Text = "";
+                                    txt_name_type_product.Text = "";
+                                    this.ActiveControl = this.txt_id_type_product;
+
+                                }
+                                catch (SqlException ex)
+                                {
+                                    message = MessageBox.Show($"Can't Execute Query to Type Product Table with error: {ex} ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
                             }
                         }
                         catch (SqlException ex)
@@ -103,6 +127,7 @@ namespace DATN_Winform
             txt_id_type_product.Text = "";
             txt_name_type_product.Text = "";
             this.ActiveControl = this.txt_id_type_product;
+            this.dataGrid_Type_Product.DataSource = null;
         }
         private void btn1_KeyDown(object sender, KeyEventArgs e)
         {

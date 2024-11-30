@@ -34,7 +34,7 @@
             label1 = new Label();
             panel3 = new Panel();
             label3 = new Label();
-            dataGridView1 = new DataGridView();
+            dataGrid_Type_Product = new DataGridView();
             panel4 = new Panel();
             button2 = new Button();
             button1 = new Button();
@@ -44,7 +44,7 @@
             label4 = new Label();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGrid_Type_Product).BeginInit();
             panel4.SuspendLayout();
             SuspendLayout();
             // 
@@ -95,7 +95,7 @@
             // 
             panel3.BackColor = SystemColors.ButtonHighlight;
             panel3.Controls.Add(label3);
-            panel3.Controls.Add(dataGridView1);
+            panel3.Controls.Add(dataGrid_Type_Product);
             panel3.Location = new Point(12, 147);
             panel3.Name = "panel3";
             panel3.Size = new Size(1131, 393);
@@ -111,14 +111,14 @@
             label3.TabIndex = 1;
             label3.Text = "Danh sách chủng loại sản phẩm";
             // 
-            // dataGridView1
+            // dataGrid_Type_Product
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(23, 80);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 62;
-            dataGridView1.Size = new Size(1091, 281);
-            dataGridView1.TabIndex = 0;
+            dataGrid_Type_Product.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGrid_Type_Product.Location = new Point(23, 80);
+            dataGrid_Type_Product.Name = "dataGrid_Type_Product";
+            dataGrid_Type_Product.RowHeadersWidth = 62;
+            dataGrid_Type_Product.Size = new Size(1091, 281);
+            dataGrid_Type_Product.TabIndex = 0;
             // 
             // panel4
             // 
@@ -211,7 +211,7 @@
             panel1.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGrid_Type_Product).EndInit();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
             ResumeLayout(false);
@@ -224,7 +224,7 @@
         private Label label1;
         private Panel panel2;
         private Panel panel3;
-        private DataGridView dataGridView1;
+        private DataGridView dataGrid_Type_Product;
         private Label label3;
         private Panel panel4;
         private Button button2;
