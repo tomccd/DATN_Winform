@@ -81,7 +81,7 @@ namespace DATN_Winform
                             int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
                             Console.WriteLine($"Number Columns: {row.ItemArray.Length}");
                             //Find in IP Columns
-                            if (result == 0) // avoid DataRace
+                            if (result == 0 && row != null) // avoid DataRace
                             {
                                 row[2] = "Đã kết nối";
                                 Console.WriteLine("Insert True OK");
@@ -99,7 +99,7 @@ namespace DATN_Winform
                             int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
                             Console.WriteLine($"Number Columns: {row.ItemArray.Length}");
                             //Find in IP Columns
-                            if (result == 0) // avoid DataRace
+                            if (result == 0 && row != null) // avoid DataRace
                             {
                                 row[2] = "Chưa kết nối";
                                 Console.WriteLine("Insert False OK");
