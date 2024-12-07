@@ -69,7 +69,7 @@ namespace DATN_Winform
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            if(this.menu_Count1.Visible == false)
+            if (this.menu_Count1.Visible == false)
             {
                 this.changeContentOnMenu_Count();
             }
@@ -77,7 +77,7 @@ namespace DATN_Winform
             this.add_Product2.Visible = false;
             this.delete_Products1.Visible = false;
             this.add_Devices1.Visible = false;
-            
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -158,27 +158,34 @@ namespace DATN_Winform
         {
             if (conn != null)
             {
-                /*Thực hiện truy vấn*/
-                string queryCollectIPAddress = "SELECT IP_Address FROM Devices;";
-                SqlCommand cmd = new SqlCommand(queryCollectIPAddress, conn);
-                try
+                if (this.total_IP_Address.Count == 0)
                 {
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataSet ds = new DataSet();
-                    adapter.Fill(ds);
-                    /*Collect IP Address*/
-                    foreach (DataRow row in ds.Tables[0].Rows)
+                    /*Thực hiện truy vấn*/
+                    string queryCollectIPAddress = "SELECT IP_Address FROM Devices;";
+                    SqlCommand cmd = new SqlCommand(queryCollectIPAddress, conn);
+                    try
                     {
-                        ArrayList element = new ArrayList();
-                        element.Add(row[0].ToString());
-                        element.Add(false);
-                        this.total_IP_Address.Add(element);
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        adapter.Fill(ds);
+                        /*Collect IP Address*/
+                        foreach (DataRow row in ds.Tables[0].Rows)
+                        {
+                            ArrayList element = new ArrayList();
+                            element.Add(row[0].ToString());
+                            element.Add(false);
+                            this.total_IP_Address.Add(element);
+                        }
+                        this.add_Devices1.set_IP_Address_ArrayList = this.total_IP_Address;
                     }
-                    this.add_Devices1.set_IP_Address_ArrayList = this.total_IP_Address;
+                    catch (SqlException ex)
+                    {
+                        DialogResult message = MessageBox.Show($"Can't execute on Collect IP_Address in Devices Tables with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-                catch (SqlException ex)
+                else
                 {
-                    DialogResult message = MessageBox.Show($"Can't execute on Collect IP_Address in Devices Tables with error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.add_Devices1.set_IP_Address_ArrayList = this.total_IP_Address;
                 }
             }
         }

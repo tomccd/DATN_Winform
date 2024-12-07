@@ -1,8 +1,10 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
+using System.Windows.Forms;
 namespace DATN_Winform
 {
     public partial class Add_Devices : UserControl
@@ -17,16 +19,17 @@ namespace DATN_Winform
         public Add_Devices()
         {
             InitializeComponent();
-            this.ActiveControl = txt_ip_devices;
-           
+            this.ActiveControl = txt_ip_devices; 
         }
         //Starting Ping
         private void StartingPingThread(ref ArrayList totalElement)
         {
             if (totalElement.Count > 0)
             {
+                Console.WriteLine("Starting create Thread in Add_Devices");
                 foreach (ArrayList element in totalElement)
                 {
+                    Console.WriteLine($"Total Devices: {totalElement.Count}");
                     /*Each IP will create a Thread to check if that IP Address is existed */
                     Thread pingThread = new Thread(() => ping(1, element));
                     pingThread.IsBackground = true;
@@ -36,8 +39,7 @@ namespace DATN_Winform
         }
         private void ping(double tout, ArrayList element)
         {
-            
-            bool updateStatus = false;
+            bool initStatus = false;
             while (!mre.WaitOne(250))
             {
                 /*Nếu DataTable được tạo trước đó hoặc không phải DataTable trống*/
@@ -55,63 +57,91 @@ namespace DATN_Winform
                         {
                             break;
                         }
-                        Thread.Sleep((int)timeout);
                     }
-                    if (reply.Status != IPStatus.Success)
+                    if (reply == null || reply.Status == IPStatus.TimedOut)
                     {
                         /*If devices was connected before*/
                         if ((bool)element[1] == true)
                         {
                             element[1] = false;
+                            Console.WriteLine("Insert False in Add_Devices");
+                            //Travel the DataTable to find the IP Address
+                            foreach (DataRow row in this.dt.Rows)
+                            {
+                                int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
+                                Console.WriteLine($"Number Columns: {row.ItemArray.Length}");
+                                //Find in IP Columns
+                                if (result == 0 && row != null) // avoid DataRace
+                                {
+                                    row[2] = "Chưa kết nối";
+                                    Console.WriteLine("Insert False OK");
+                                    this.updateDataGrid();
+                                    break;
+                                }
+                            }
+                        }
+                        if (initStatus == false)
+                        {
+                            Console.WriteLine("Insert False in Add_Devices");
+                            //Travel the DataTable to find the IP Address
+                            foreach (DataRow row in this.dt.Rows)
+                            {
+                                int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
+                                //Find in IP Columns
+                                if (result == 0) // avoid DataRace
+                                {
+                                    row[2] = "Chưa kết nối";
+                                    Console.WriteLine("Insert False OK");
+                                    this.updateDataGrid();
+                                    break;
+                                }
+                            }
+                            initStatus = true;
                         }
                     }
-                    else
+                    else if(reply.Status == IPStatus.Success)
                     {
                         /*If device was not connected before*/
                         if ((bool)element[1] == false)
                         {
                             element[1] = true;
-                        }
-                    }
-                    if ((bool)element[1] == true)
-                    {
-                        Console.WriteLine("Insert True");
-                        foreach (DataRow row in this.dt.Rows)
-                        {
-                            int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
-                            Console.WriteLine($"Number Columns: {row.ItemArray.Length}");
-                            //Find in IP Columns
-                            if (result == 0 && row != null) // avoid DataRace
+                            Console.WriteLine("Insert True in Add_Devices");
+                            foreach (DataRow row in this.dt.Rows)
                             {
-                                row[2] = "Đã kết nối";
-                                Console.WriteLine("Insert True OK");
-                                this.updateDataGrid();
-                                break;
+                                int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
+                                //Find in IP Columns
+                                if (result == 0) // avoid DataRace
+                                {
+                                    row[2] = "Đã kết nối";
+                                    Console.WriteLine("Insert True OK");
+                                    this.updateDataGrid();
+                                    break;
+                                }
                             }
                         }
-                    }
-                    else if ((bool)element[1] == false)
-                    {
-                        Console.WriteLine("Insert False");
-                        //Travel the DataTable to find the IP Address
-                        foreach (DataRow row in this.dt.Rows)
+                        if (initStatus == false)
                         {
-                            int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
-                            Console.WriteLine($"Number Columns: {row.ItemArray.Length}");
-                            //Find in IP Columns
-                            if (result == 0 && row != null) // avoid DataRace
+                            Console.WriteLine("Insert True in Add_Devices");
+                            foreach (DataRow row in this.dt.Rows)
                             {
-                                row[2] = "Chưa kết nối";
-                                Console.WriteLine("Insert False OK");
-                                this.updateDataGrid();
-                                break;
+                                int result = String.Compare(row["IP_Address"].ToString(), element[0].ToString());
+                                //Find in IP Columns
+                                if (result == 0 && row != null) // avoid DataRace
+                                {
+                                    row[2] = "Đã kết nối";
+                                    Console.WriteLine("Insert True OK");
+                                    this.updateDataGrid();
+                                    break;
+                                }
                             }
+                            initStatus = true;
                         }
                     }
-                    //GC.Collect(); // Garbage Collection
+                    
                     Thread.Sleep(500);
                 }
             }
+            Console.WriteLine("Kill Thread in Add_Devices");
         }
         private void updateDataGrid()
         {
@@ -220,18 +250,10 @@ namespace DATN_Winform
                                     if (ds.Tables[0].Rows.Count > 0)
                                     {
                                         var oldTable = dataGrid_Device_Productivity.DataSource as IDisposable;
-                                        dt = new DataTable();
+                                        dt.Dispose();
                                         dt = ds.Tables[0];
                                         //Bổ sung cột trạng thái
                                         dt.Columns.Add("Status").SetOrdinal(2);
-                                        //foreach (DataRow row in dt.Rows)
-                                        //{
-                                        //    //Thay đổi giá trị trong cột Status mới thêm
-                                        //    if (row[2] == String.Empty)
-                                        //    {
-                                        //        row[2] = "Chưa kết nối";
-                                        //    }
-                                        //}
                                         dataGrid_Device_Productivity.DataSource = dt;
                                         /*Sửa tên cột*/
                                         dataGrid_Device_Productivity.Columns[0].HeaderText = "Địa chỉ IP";
@@ -289,6 +311,7 @@ namespace DATN_Winform
         {
             set
             {
+                Console.WriteLine("Reset ManualResetEvent in Add_Devices");
                 this.total_IP_Address.Clear();
                 mre.Set();
                 Thread.Sleep(250);
@@ -297,13 +320,58 @@ namespace DATN_Winform
                 this.StartingPingThread(ref total_IP_Address);
             }
         }
+        //Display Early
+        private void displayEarly()
+        {
+            string query = "SELECT Devices.IP_Address, Devices.Device_Name, Devices_Productivity.Total_Product, Devices_Productivity.Electric_Product, Devices_Productivity.Clothes_Product, Devices_Productivity.Diff_Product FROM Devices INNER JOIN Devices_Productivity ON Devices.IP_Address = Devices_Productivity.IP_Address;";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            try
+            {
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                adapter.Fill(ds);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    var oldTable = dataGrid_Device_Productivity.DataSource as IDisposable;
+                    dt.Dispose();
+                    dt = ds.Tables[0];
+                    //Bổ sung cột trạng thái
+                    dt.Columns.Add("Status").SetOrdinal(2);
+                    dataGrid_Device_Productivity.DataSource = dt;
+                    /*Sửa tên cột*/
+                    dataGrid_Device_Productivity.Columns[0].HeaderText = "Địa chỉ IP";
+                    dataGrid_Device_Productivity.Columns[1].HeaderText = "Tên thiết bị";
+                    dataGrid_Device_Productivity.Columns[2].HeaderText = "Trạng thái";
+                    dataGrid_Device_Productivity.Columns[3].HeaderText = "Tổng số sản phẩm phân loại";
+                    dataGrid_Device_Productivity.Columns[4].HeaderText = "Số sản phẩm Thiết bị điện tử";
+                    dataGrid_Device_Productivity.Columns[5].HeaderText = "Số sản phẩm Quần áo";
+                    dataGrid_Device_Productivity.Columns[6].HeaderText = "Số sản phẩm thuộc lại Khác";
+                    /*Sửa màu cột*/
+                    dataGrid_Device_Productivity.EnableHeadersVisualStyles = false;
+                    dataGrid_Device_Productivity.ColumnHeadersDefaultCellStyle.BackColor = Color.AliceBlue;
+                    dataGrid_Device_Productivity.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    if (oldTable != null)
+                    {
+                        oldTable.Dispose();
+                    }
 
+                }
+                txt_ip_devices.Text = "";
+                txt_name_devices.Text = "";
+                this.ActiveControl = txt_ip_devices;
+            }
+            catch (SqlException ex)
+            {
+                DialogResult message = MessageBox.Show($"Can't Execute Query to Devices Table with error: {ex} ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         //Sync Connection
         public SqlConnection syncConnection
         {
             set
             {
                 this.conn = value;
+                this.displayEarly();
             }
         }
     }

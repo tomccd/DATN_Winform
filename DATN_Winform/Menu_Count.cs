@@ -17,14 +17,14 @@ namespace DATN_Winform
         public Menu_Count()
         {
             InitializeComponent();
-            
+
         }
         //Starting Ping
         private void StartingPingThread(ref ArrayList totalElement)
         {
             if (totalElement.Count > 0)
             {
-                Console.WriteLine("Starting create Thread");
+                Console.WriteLine("Starting create Thread in Menu_Count");
                 foreach (ArrayList element in totalElement)
                 {
                     /*Each IP will create a Thread to check if that IP Address is existed */
@@ -38,11 +38,11 @@ namespace DATN_Winform
             }
         }
         //Ping to Registered Device
-        private void ping(double tout,ArrayList element)
+        private void ping(double tout, ArrayList element)
         {
-            
             //Console.WriteLine("Thread is running");
             //Wait for mre flags
+            bool initStatus = false;
             while (!mre.WaitOne(1000))
             {
                 //Console.WriteLine("Thread OK");
@@ -69,8 +69,17 @@ namespace DATN_Winform
                         active_device -= 1;
                         this.updateLabel_Online_Devices(active_device.ToString());
                     }
+                    if(initStatus == false)
+                    {
+                        if(active_device > 0)
+                        {
+                            active_device -= 1;
+                            this.updateLabel_Online_Devices(active_device.ToString());
+                            initStatus = true;
+                        }
+                    }
                 }
-                else
+                else if(reply.Status == IPStatus.Success)
                 {
                     /*If device was not connected before*/
                     if ((bool)element[1] == false)
@@ -80,23 +89,25 @@ namespace DATN_Winform
                         this.updateLabel_Online_Devices(active_device.ToString());
                     }
                 }
-                GC.Collect(); // Garbage Collection
-                GC.WaitForPendingFinalizers();
-                GC.WaitForFullGCComplete();
+                //GC.Collect(); // Garbage Collection
+                //GC.WaitForPendingFinalizers();
+                //GC.WaitForFullGCComplete();
                 Thread.Sleep(500);
-                
+
             }
-            Console.WriteLine("Kill");
+            Console.WriteLine("Kill Thread in Menu_Count");
         }
         //Update Label
         private void updateLabel_Online_Devices(string content)
         {
             if (this.label_onl_device.InvokeRequired)
             {
+                Console.WriteLine("Update Value in Menu_Count");
                 this.label_onl_device.Invoke(new Action(() => this.label_onl_device.Text = content));
             }
             else
             {
+                Console.WriteLine("Update Value in Menu_Count");
                 this.label_onl_device.Text = content;
             }
         }
@@ -143,7 +154,7 @@ namespace DATN_Winform
                             dataGrid_weighed_Product.EnableHeadersVisualStyles = false;
                             dataGrid_weighed_Product.ColumnHeadersDefaultCellStyle.BackColor = Color.AliceBlue;
                             dataGrid_weighed_Product.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                            if(oldTable != null)
+                            if (oldTable != null)
                             {
                                 oldTable.Dispose();
                             }
@@ -159,7 +170,7 @@ namespace DATN_Winform
                 else
                 {
                     string query = "SELECT Weigh_Non_Certificate.ID_Product, Weigh_Non_Certificate.Weighs FROM Weigh_Non_Certificate";
-                    SqlCommand cmd = new SqlCommand(query,conn);
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     try
                     {
                         SqlDataAdapter adapter = new SqlDataAdapter(cmd);
@@ -170,7 +181,7 @@ namespace DATN_Winform
                             DataTable dt = ds.Tables[0];
                             dt.Columns.Add("Name_Product").SetOrdinal(1);
                             dt.Columns.Add("Type_Product").SetOrdinal(2);
-                            foreach(DataRow row in dt.Rows)
+                            foreach (DataRow row in dt.Rows)
                             {
                                 //Change Content of row[1] and row[2]
                                 row["Name_Product"] = "Không xác định";
@@ -201,6 +212,7 @@ namespace DATN_Winform
         {
             set
             {
+                Console.WriteLine("Reset ManualResetEvent in Menu_Count");
                 this.active_device = 0;
                 this.total_IP_Address.Clear();
                 mre.Set();

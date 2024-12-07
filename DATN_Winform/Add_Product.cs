@@ -88,7 +88,6 @@ namespace DATN_Winform
                 }
             }
         }
-
         private void btn_add_product_Click_1(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(this.txt_ten_san_pham.Text) || String.IsNullOrEmpty(this.cbo_ten_chung_loai_san_pham.Text) || String.IsNullOrEmpty(this.txt_ma_san_pham.Text))
